@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const hotelSchema = mongoose.Schema({
 
 
-    title:{
+    name:{
         type:String ,
         required:true
     },
@@ -35,10 +35,9 @@ const hotelSchema = mongoose.Schema({
         required:true ,
         type:Number
     },
-    featurePrice:{
-        required:true ,
-        type:Number
-    } ,
+    rooms:{
+        type:[String]
+    },
     feature:{
         type:Boolean ,
         default:false

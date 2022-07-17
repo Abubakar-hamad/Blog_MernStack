@@ -3,18 +3,19 @@ import asyncHandler from 'express-async-handler';
 
 
 export const createNewHotel = asyncHandler(async(req,res)=>{
-    const {title , type , city  , address , des ,cheapestPrice , featurePrice} = req.body
-    if(!title || !type || !city  || !address  || !des || !cheapestPrice || !featurePrice){
+    const {name , type , city  , address , des ,cheapestPrice , featurePrice} = req.body
+    if(!name || !type || !city  || !address  || !des || !cheapestPrice ){
         return res.status(400).json('please fill all fields')
     }
 
-    const hotelName = await HotelModel.findOne({title})
+    const hotelName = await HotelModel.findOne({name})
 
     if(hotelName){
          return res.status(400).json("the hotel Name Already Created")
     }
 
-    const Hotel =  await new HotelModel(req.body)
+    const Hotel =  new HotelModel(req.body)
+    await Hotel.save();
 
     res.status(201).json({successfully:Hotel})
 })
