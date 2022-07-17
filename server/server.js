@@ -9,7 +9,7 @@ import Auth from "./routes/authRoutes.js";
 import User from "./routes/userRoutes.js";
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-import createError from "./middleware/error.js"
+import errorHandler from "./middleware/error.js"
 
 const port  = process.env.PORT || 5000
 const app = express()
@@ -26,7 +26,7 @@ app.use('/api/auth' , Auth)
 app.use('/api/user' , User)
 app.use('/api/hotel' , Hotel)
 
-app.use(createError)
+app.use(errorHandler)
 
 
 // connect Port
