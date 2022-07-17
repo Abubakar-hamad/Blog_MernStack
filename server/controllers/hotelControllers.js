@@ -1,26 +1,58 @@
 import HotelModel from "../models/HotelModel.js";
-import UserModel from "../models/UserModel.js";
 import asyncHandler from 'express-async-handler';
 
 
 export const createNewHotel = asyncHandler(async(req,res)=>{
-    // const {title , type , city  , address , des ,cheapestPrice , featurePrice} = req.body
-    // if(!title || !type || !city  || !address  || !des || !cheapestPrice || !featurePrice){
-    //     return res.status(400).json('please fill all fields')
-    // }
+    const {title , type , city  , address , des ,cheapestPrice , featurePrice} = req.body
+    if(!title || !type || !city  || !address  || !des || !cheapestPrice || !featurePrice){
+        return res.status(400).json('please fill all fields')
+    }
 
-    const Hotel = await HotelModel.create({
-        title:req.body.title,
-        type:req.body.type,
-        city:req.body.city,
-        address:req.body.address,
-        des:req.body.des,
-        cheapestPrice:req.body.cheapestPrice,
-        featurePrice:req.body.featurePrice,
-    
-    })
-    
+    const hotelName = await HotelModel.findOne({title})
 
+    if(hotelName){
+         return res.status(400).json("the hotel Name Already Created")
+    }
+
+    const Hotel =  await new HotelModel(req.body)
 
     res.status(201).json({successfully:Hotel})
+})
+
+
+//UPDATE FUNCTION 
+export const updateHotel = asyncHandler(async(req , res)=>{
+    const updateH = await HotelModel.findByIdAndUpdate(req.params.id)
+    if(!updateH){
+        return res.status(401).json({message:'there is no Hotel with this id'})
+    }
+
+    const updateHot = await  HotelModel.findByIdAndUpdate(req.params.id , req.body , {new:true})
+    return res.status(201).json({updatedSuccessfully:updateHot})
+})
+
+
+// DELETE FUNCTION
+
+export const deleteHotel = asyncHandler(async(req, res)=>{
+    const hotelD = await HotelModel.findByIdAndDelete(req.params.id)
+    
+    if(!hotelD){
+        return res.status(404).json({message:'there is no Hotel with this id'})
+    }
+
+    // const deletedHotel = await HotelModel.findByIdAndDelete(req.params.id , )
+
+    return res.status(200).json({HtelDeletedSuccessfully:req.params.id})
+})
+
+
+// GET ALL HOTELS FUNCTION
+
+export const getHotels = asyncHandler(async(req,res)=>{
+    const hotels = await HotelModel.find()
+    if(!hotels){
+        return res.status(401).json({message:'Error fithching Data'})
+    }
+    return res.status(200).json(hotels)
 })
