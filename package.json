@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node server/server.js",
-    "server": "nodemon server/server.js",
-    "client":"npm start --prefix client"
+    "server": "nodemon server/server.js"
+ 
   },
   "keywords": [],
   "author": "",
@@ -25,6 +25,10 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.4",
     "nodemon": "^2.0.19",
+    "react-date-range": "^1.4.0",
+    "react-router-dom": "^6.3.0",
     "upper-case": "^2.0.2"
   }
 }
+
+

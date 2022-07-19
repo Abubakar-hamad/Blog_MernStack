@@ -47,13 +47,51 @@ export const deleteHotel = asyncHandler(async(req, res)=>{
     return res.status(200).json({HtelDeletedSuccessfully:req.params.id})
 })
 
+// GET ONE HOTEL FUNCTION
+export const getHotel = asyncHandler(async(req ,res)=>{
+    const hotel = await HotelModel.findById(req.params.id)
+    if(!hotel){
+        return res.status(404).json("hotel not Found")
+    } 
+    res.status(200).json(hotel)
+})
+
+
 
 // GET ALL HOTELS FUNCTION
 
 export const getHotels = asyncHandler(async(req,res)=>{
-    const hotels = await HotelModel.find()
+    const {min  , max , ...others }= req.query
+    const hotels = await HotelModel.find({
+        ...others , 
+        cheapestPrice:{$gt:min ||1 , $lt:max || 500}
+    })
     if(!hotels){
         return res.status(401).json({message:'Error fithching Data'})
     }
     return res.status(200).json(hotels)
+})
+
+
+export const countByCity = asyncHandler(async(req,res)=>{
+    const cities = req.query.cities.split(",")
+ 
+    const list  = await Promise.all(cities.map(city=>{
+        return HotelModel.countDocuments({city})
+    }))
+    return res.status(200).json(list)
+})
+
+
+export const countByType = asyncHandler(async(req,res)=>{
+   
+    const honeymoonCount = await HotelModel.countDocuments({type:"honeymoon"})
+    const relaxingCount = await HotelModel.countDocuments({type:"relaxing"})
+    const travelingCount = await HotelModel.countDocuments({type:"traveling"})
+    
+    return res.status(200).json([
+        {type:"honeymoon" , count:honeymoonCount},
+        {type:"relaxing" , count:relaxingCount},
+        {type:"traveling" , count:travelingCount},
+    ])
 })
