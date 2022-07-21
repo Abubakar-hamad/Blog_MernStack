@@ -29,7 +29,7 @@ export const  createUser =  asyncHandler(async(req, res)=>{
             password:hashedPass
         })
     await user.save();
-    res.status(201).json({"account created successfully": user})
+    res.status(201).json(user)
 })
 
 
@@ -58,7 +58,7 @@ export const loginUser = asyncHandler(async(req , res)=>{
 
     // getUSer to ui
     const {password , isAdmin , ...otherDetails} = user._doc
-    res.cookie("access_token" , token , {httpOnly:true}).status(200).json({otherDetails , token }) 
+    res.cookie("access_token" , token , {httpOnly:true}).status(200).json(otherDetails  ) 
 })
 
 
